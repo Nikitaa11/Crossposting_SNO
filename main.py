@@ -10,11 +10,12 @@ import discord
 import requests
 from io import BytesIO
 import tracemalloc
+import os
 
 from vk_api.exceptions import VkApiError
 from discord import Intents
 import asyncio
-import os
+
 
 # инициализация бота Telegram
 token_tg = settings_T['token_tg']
