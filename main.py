@@ -15,16 +15,17 @@ import os
 import threading
 import datetime
 
-from flask import Flask, request
-from vk_api.exceptions import VkApiError
-from discord import Intents
-import asyncio
-import aiohttp
+# from flask import Flask, request
+# from vk_api.exceptions import VkApiError
+# from discord import Intents
+# import asyncio
+# import aiohttp
 
 
 # инициализация бота Telegram
 token_tg = settings_T['token_tg']
 chat_id_tg = settings_T['chat_id']
+chat_with_tgbot_id = settings_T['chat_with_tgbot_id']
 # Создаем объект бота
 bot_tg = telebot.TeleBot(token_tg)
 
@@ -81,7 +82,7 @@ def listen_for_events():
             answer_texts_str = ', '.join(list_of_answers) if list_of_answers else 'нет ответа'
 
             msg = f"Пользователь {user_name} ({user_id}) проголосовал в опросе '{poll_question}' ({poll_date}) за ответ(ы): {answer_texts_str}"
-            bot_tg.send_message(chat_id=chat_id_tg, text=msg)
+            bot_tg.send_message(chat_with_tgbot_id, msg)
 
 
 # Запуск обработки событий в отдельном потоке

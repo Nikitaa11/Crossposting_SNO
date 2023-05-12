@@ -1,7 +1,8 @@
 # Telegram
 settings_T = {
     'token_tg': '',
-    'chat_id': ''
+    'chat_id': '',
+    'chat_with_tgbot_id': ''
 }
 
 # VK
