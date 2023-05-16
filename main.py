@@ -152,6 +152,8 @@ while True:
         # Скачиваем файл по ссылке file_path
         file_content = bot_tg.download_file(file_info.file_path)
         # bot_ds.loop.create_task(channel.send(file=discord.File(BytesIO(file_content), filename='photo.jpg')))
+        if message.caption != '':
+            await channel.send(message.caption)
         await channel.send(file=discord.File(BytesIO(file_content), filename='photo.jpg'))
 
 
@@ -197,6 +199,8 @@ while True:
         file.name = doc.file_name
         # Отправляем файл в канал Discord
         # bot_ds.loop.create_task(channel.send(file=discord.File(file)))
+        if message.caption != '':
+            await channel.send(message.caption)
         await channel.send(file=discord.File(file))
 
 
@@ -247,7 +251,7 @@ while True:
                     bot_tg.send_message(message.chat.id, 'Сообщение доставлено всем:)')
                 elif message.photo:
                     send_photo_to_tg(message)
-                    send_doc_to_vk(message)
+                    send_photo_to_vk(message)
                     await send_photo_to_ds(message, channel)
                     bot_tg.send_message(message.chat.id, "Фото доставлено всем:)")
                 elif message.document:
