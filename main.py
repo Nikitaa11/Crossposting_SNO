@@ -152,8 +152,11 @@ while True:
         # Скачиваем файл по ссылке file_path
         file_content = bot_tg.download_file(file_info.file_path)
         # bot_ds.loop.create_task(channel.send(file=discord.File(BytesIO(file_content), filename='photo.jpg')))
-        if message.caption != '':
-            await channel.send(message.caption)
+        try:
+            if message.caption != '':
+                await channel.send(message.caption)
+        except:
+            pass
         await channel.send(file=discord.File(BytesIO(file_content), filename='photo.jpg'))
 
 
@@ -168,13 +171,13 @@ while True:
         # # Получаем объект документа
         # document = message.document
         # # Получаем URL-адрес файла из объекта документа
-        # file_url = bot.get_file_url(document.file_id)
+        # file_url = bot_tg.get_file_url(document.file_id)
         # # Скачиваем файл и сохраняем его на диск
         # response = requests.get(file_url)
         # with open(document.file_name, 'wb') as f:
         #     f.write(response.content)
         # # Получаем URL-адрес сервера для загрузки документа на стену
-        # upload_url = vk.docs.getWallUploadServer(group_id=group_id)['upload_url']
+        # upload_url = vk.docs.getWallUploadServer(group_id=group_id_vk)['upload_url']
         # # Загружаем документ на сервер
         # with open(document.file_name, 'rb') as f:
         #     response = requests.post(upload_url, files={'file': f})
@@ -183,7 +186,7 @@ while True:
         # document = vk.docs.save(file=response.json()['file'], title='Название документа')['doc']
         #
         # # Опубликовываем запись на стене группы с прикрепленным документом
-        # vk.wall.post(owner_id=-group_id, message='Новый пост с документом',
+        # vk.wall.post(owner_id=-group_id_vk, message='Новый пост с документом',
         #              attachments=f"doc{document['owner_id']}_{document['id']}")
 
 
@@ -199,8 +202,11 @@ while True:
         file.name = doc.file_name
         # Отправляем файл в канал Discord
         # bot_ds.loop.create_task(channel.send(file=discord.File(file)))
-        if message.caption != '':
-            await channel.send(message.caption)
+        try:
+            if message.caption != '':
+                await channel.send(message.caption)
+        except:
+            pass
         await channel.send(file=discord.File(file))
 
 
@@ -253,12 +259,18 @@ while True:
                     send_photo_to_tg(message)
                     send_photo_to_vk(message)
                     await send_photo_to_ds(message, channel)
-                    bot_tg.send_message(message.chat.id, "Фото доставлено всем:)")
+                    if message.caption is None:
+                        bot_tg.send_message(message.chat.id, "Фото доставлено всем:)")
+                    else:
+                        bot_tg.send_message(message.chat.id, "Пост с фото доставлен всем:)")
                 elif message.document:
                     send_doc_to_tg(message)
                     send_doc_to_vk(message)
-                    await send_photo_to_ds(message, channel)
-                    bot_tg.send_message(message.chat.id, "Документ доставлен в тг и дс:)")
+                    await send_doc_to_ds(message, channel)
+                    if message.caption is None:
+                        bot_tg.send_message(message.chat.id, "Документ доставлен в тг и дс:)")
+                    else:
+                        bot_tg.send_message(message.chat.id, "Пост с документом доставлен в тг и дс:)")
                 elif message.sticker:
                     send_sticker_to_tg(message)
                 elif message.poll:
@@ -312,10 +324,16 @@ while True:
                         bot_tg.send_message(message.chat.id, 'Сообщение доставлено в дс:)')
                     elif message.photo:
                         await send_photo_to_ds(message, channel)
-                        bot_tg.send_message(message.chat.id, "Фото доставлено в дс:)")
+                        if message.caption is None:
+                            bot_tg.send_message(message.chat.id, "Фото доставлено в дс:)")
+                        else:
+                            bot_tg.send_message(message.chat.id, "Пост с фото доставлен в дс:)")
                     elif message.document:
                         await send_doc_to_ds(message, channel)
-                        bot_tg.send_message(message.chat.id, "Документ доставлен в дс:)")
+                        if message.caption is None:
+                            bot_tg.send_message(message.chat.id, "Документ доставлен в дс:)")
+                        else:
+                            bot_tg.send_message(message.chat.id, "Пост с документом доставлен в дс:)")
                     else:
                         bot_tg.send_message(message.chat.id, "С таким типом данных не работаю(")
                 except Exception as err:
